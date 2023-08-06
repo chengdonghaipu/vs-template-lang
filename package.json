@@ -1,0 +1,28 @@
+{
+  "name": "template-lang",
+  "displayName": "vs-template-lang",
+  "description": "vuGualr template",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.81.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [],
+    "grammars": [
+      {
+				"path": "./syntaxes/inline-template.json",
+				"scopeName": "inline-template.vg",
+				"injectTo": [
+					"source.ts"
+				],
+				"embeddedLanguages": {
+					"text.html": "html",
+					"source.css": "css"
+				}
+			}
+    ]
+  }
+}
