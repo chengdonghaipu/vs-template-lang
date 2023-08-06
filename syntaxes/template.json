@@ -1,0 +1,46 @@
+{
+  "scopeName": "template.vg",
+  "injectionSelector": "L:text.html -comment",
+  "patterns": [
+    {
+      "include": "#interpolation"
+    }
+  ],
+  "repository": {
+    "interpolation": {
+      "begin": "{{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.block.ts"
+        }
+      },
+      "end": "}}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.block.ts"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "expression": {
+      "name": "meta.expression.ng",
+      "patterns": [
+        {
+          "include": "#identifiers"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.readwrite.ts",
+          "match": "[_$[:alpha:]][_$[:alnum:]]*"
+        }
+      ]
+    }
+  }
+}
