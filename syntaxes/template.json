@@ -20,6 +20,7 @@
           "name": "punctuation.definition.block.ts"
         }
       },
+      "contentName": "expression.vg",
       "patterns": [
         {
           "include": "#expression"

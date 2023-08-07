@@ -13,16 +13,16 @@
     "languages": [],
     "grammars": [
       {
-				"path": "./syntaxes/inline-template.json",
-				"scopeName": "inline-template.vg",
-				"injectTo": [
-					"source.ts"
-				],
-				"embeddedLanguages": {
-					"text.html": "html",
-					"source.css": "css"
-				}
-			},
+          "path": "./syntaxes/inline-template.json",
+          "scopeName": "inline-template.vg",
+          "injectTo": [
+              "source.ts"
+          ],
+          "embeddedLanguages": {
+              "text.html": "html",
+              "source.css": "css"
+          }
+      },
       {
         "path": "./syntaxes/template.json",
         "scopeName": "template.vg",
@@ -34,10 +34,6 @@
           "text.html": "html",
           "source.css": "css"
         }
-      },
-      {
-        "path": "./syntaxes/expression.json",
-        "scopeName": "expression.vg"
       }
     ]
   }
