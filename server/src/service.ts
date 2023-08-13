@@ -18,7 +18,7 @@ export class Service {
 
     private addProtocolHandlers(conn: lsp.Connection) {
         conn.onInitialize(p => this.onInitialize(p));
-        // conn.onHover(p => this.onHover(p));
+        conn.onHover(p => this.onHover(p));
         // 这个处理函数提供了初始补全项列表
         conn.onCompletion(p => this.onCompletion(p));
         // 这个函数为补全列表的选中项提供了更多信息
@@ -60,6 +60,19 @@ export class Service {
             document,
             params.position,
             htmlLanguageService.parseHTMLDocument(document)
+        );
+    }
+
+    private onHover(params: lsp.TextDocumentPositionParams): lsp.Hover|null {
+        const document = documents.get(params.textDocument.uri);
+        if (!document) {
+            return null;
+        }
+    
+        return htmlLanguageService.doHover(
+            document,
+            params.position,
+            htmlLanguageService.parseHTMLDocument(document)  
         );
     }
 
