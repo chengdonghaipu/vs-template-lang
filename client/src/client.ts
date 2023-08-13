@@ -25,38 +25,29 @@ export class VgLanguageClient implements vscode.Disposable {
         { scheme: 'file', language: 'html' },
         { scheme: 'file', language: 'typescript' },
       ],
-      synchronize: {
-        fileEvents: [
-          vscode.workspace.createFileSystemWatcher('**/tsconfig.json'),
-        ]
-      },
-      revealOutputChannelOn: lsp.RevealOutputChannelOn.Never,
-      outputChannel: this.outputChannel,
       middleware: {
-        // // 悬停
-        // provideHover: async (
-        //     document: vscode.TextDocument, position: vscode.Position,
-        //     token: vscode.CancellationToken, next: lsp.ProvideHoverSignature) => {
-        //   if (!(await this.isInVgProject(document)) ||
-        //       !isInsideInlineTemplateRegion(document, position)) {
-        //     return;
-        //   }
+        // 悬停
+        provideHover: async (
+            document: vscode.TextDocument, position: vscode.Position,
+            token: vscode.CancellationToken, next: lsp.ProvideHoverSignature) => {
+          if (!(await this.isInVgProject(document)) ||
+              !isInsideInlineTemplateRegion(document, position)) {
+            return;
+          }
 
-        //   const angularResultsPromise = next(document, position, token);
+          // const angularResultsPromise = next(document, position, token);
 
-        //   // Include results for inline HTML via virtual document and native html providers.
-        //   if (document.languageId === 'typescript') {
-        //     const vdocUri = this.createVirtualHtmlDoc(document);
-        //     const htmlProviderResultsPromise = vscode.commands.executeCommand<vscode.Hover[]>(
-        //         'vscode.executeHoverProvider', vdocUri, position);
+          // Include results for inline HTML via virtual document and native html providers.
+          if (document.languageId === 'typescript') {
+            const vdocUri = this.createVirtualHtmlDoc(document);
+            const htmlProviderResultsPromise = vscode.commands.executeCommand<vscode.Hover[]>(
+                'vscode.executeHoverProvider', vdocUri, position);
+            const htmlProviderCompletions = await htmlProviderResultsPromise;
+            return htmlProviderCompletions?.[0];
+          }
 
-        //     const [angularResults, htmlProviderResults] =
-        //         await Promise.all([angularResultsPromise, htmlProviderResultsPromise]);
-        //     return angularResults ?? htmlProviderResults?.[0];
-        //   }
-
-        //   return angularResultsPromise;
-        // },
+          return;
+        },
         // 自动完成
         provideCompletionItem: async (
           document: vscode.TextDocument, position: vscode.Position,
