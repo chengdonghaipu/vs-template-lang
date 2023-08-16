@@ -2,6 +2,8 @@ import * as lsp from 'vscode-languageserver/node';
 import { getLanguageService } from 'vscode-html-languageservice';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { TextDocuments } from 'vscode-languageserver';
+import * as ts from "typescript";
+import {getHTMLVirtualContent} from "./embedded_support";
 
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
@@ -23,11 +25,13 @@ export class Service {
         conn.onCompletion(p => this.onCompletion(p));
         // 这个函数为补全列表的选中项提供了更多信息
         // conn.onCompletionResolve(p => this.onCompletionResolve(p));
+        conn.onFoldingRanges(p => this.onFoldingRanges(p));
     }
 
     private onInitialize(_: lsp.InitializeParams): lsp.InitializeResult {
         const result: lsp.InitializeResult = {
             capabilities: {
+                foldingRangeProvider: true,
                 // 增量式文本文档同步
                 textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
                 // 告诉客户端该服务器支持代码完成。
@@ -68,12 +72,30 @@ export class Service {
         if (!document) {
             return null;
         }
-    
+        document.getText()
         return htmlLanguageService.doHover(
             document,
             params.position,
             htmlLanguageService.parseHTMLDocument(document)  
         );
+    }
+
+    private onFoldingRanges(params: lsp.FoldingRangeParams) {
+        if (!params.textDocument.uri?.endsWith('ts')) {
+            return null;
+        }
+        const document = documents.get(params.textDocument.uri);
+        if (!document) {
+            return null;
+        }
+        const text = document.getText()
+        const sf = ts.createSourceFile(`${params.textDocument.uri}`, text, ts.ScriptTarget.Latest, true);
+        const virtualHtmlDocContents = getHTMLVirtualContent(sf);
+
+        const virtualHtmlDoc =
+            TextDocument.create(params.textDocument.uri.toString(), 'html', 0, virtualHtmlDocContents);
+
+        return htmlLanguageService.getFoldingRanges(virtualHtmlDoc);
     }
 
     listen(): void {
