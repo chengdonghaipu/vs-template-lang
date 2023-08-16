@@ -24,28 +24,28 @@
   "contributes": {
     "grammars": [
       {
-          "path": "./syntaxes/inline-template.json",
-          "scopeName": "inline-template.vg",
-          "injectTo": [
-              "source.ts"
-          ],
-          "embeddedLanguages": {
-              "text.html": "html",
-              "source.css": "css"
-          }
-      },
-      {
-        "path": "./syntaxes/template.json",
-        "scopeName": "template.vg",
+        "path": "./syntaxes/inline-template.json",
+        "scopeName": "inline-template.vg",
         "injectTo": [
-          "text.html.derivative",
-          "source.ts"
+            "source.ts"
         ],
         "embeddedLanguages": {
-          "text.html": "html",
-          "source.css": "css"
+            "text.html": "html",
+            "source.css": "css"
         }
+    },
+    {
+      "path": "./syntaxes/template.json",
+      "scopeName": "template.vg",
+      "injectTo": [
+        "text.html.derivative",
+        "source.ts"
+      ],
+      "embeddedLanguages": {
+        "text.html": "html",
+        "source.css": "css"
       }
+    }
     ]
   },
   "devDependencies": {
